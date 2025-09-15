@@ -16,6 +16,7 @@ A flexible binding library for Go that maps external values (YAML, JSON, CLI arg
     -   [JSONSupplier](#jsonsupplier)
     -   [YAMLSupplier](#yamlsupplier)
     -   [EnvSupplier](#envsupplier)
+    -   [SelfSupplier](#selfsupplier)
     -   [Other Suppliers](#other-suppliers)
 -   [Testing](#testing)
 -   [Contributing](#contributing)
@@ -198,6 +199,43 @@ var test struct {
     Port int `env:"PORT"`
 }
 bind.Bind(ctx, &test, []bind.Supplier{sup})
+```
+
+### SelfSupplier
+
+The SelfSupplier is used to populate fields in a struct based on values from the struct itself. This is particularly useful for scenarios where you want to use certain fields as keys to look up additional data from a store or database.
+
+**Example:**
+
+```go
+type User struct {
+    ID    int
+    Phone string
+    Name  string `test:"id=ID"`
+    Age   int    `test2:"num=Phone,other=ID"`
+}
+
+u := User{
+    ID:    9001,
+    Phone: "970-4133",
+}
+
+testSup, _ := bind.NewSelfSupplier(func(ctx context.Context, filter map[string]any) (string, error) {
+    // filter == map[string]any{"id": 9001}
+    // Notice how the filter includes the value of ID from the struct
+    return "found!", nil
+}, "test", &u)
+
+test2Sup, _ := bind.NewSelfSupplier(func(ctx context.Context, filter map[string]any) (int, error) {
+    // filter == map[string]any{"num": "970-4133", "other": 9001}
+    // Notice how the filter includes the values of Phone and ID from the struct
+    return 42, nil
+}, "test2", &u)
+
+bind.Bind(ctx, &u, []bind.Supplier{testSup, test2Sup})
+
+// u.Name == "found!"
+// u.Age  == 42
 ```
 
 ### Other Suppliers
