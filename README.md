@@ -45,7 +45,7 @@ yaml := []byte(`host: localhost`)
 yamlSup, _ := bind.NewYAMLSupplier(bytes.NewReader(yaml))
 
 json := []byte(`{"port":8080}`)
-jsonSup, _ := bind.NewJSONSupplier(json)
+jsonSup, _ := bind.NewJSONSupplier(bytes.NewReader(json))
 
 os.Setenv("DB_URL", "postgres://user:pass@localhost/db")
 
