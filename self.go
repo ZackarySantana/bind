@@ -8,9 +8,7 @@ import (
 	"strings"
 )
 
-type Store[T any] func(ctx context.Context, filter map[string]any) (T, error)
-
-func NewSelfSupplier[T any](store Store[T], kind string, self any) (*StoreSupplier[T], error) {
+func NewSelfSupplier[T any](lookup func(ctx context.Context, filter map[string]any) (T, error), kind string, self any) (*SelfSupplier[T], error) {
 	if self == nil {
 		return nil, errors.New("self is nil")
 	}
@@ -18,21 +16,21 @@ func NewSelfSupplier[T any](store Store[T], kind string, self any) (*StoreSuppli
 	if err != nil {
 		return nil, fmt.Errorf("getting top level fields from struct: %w", err)
 	}
-	return &StoreSupplier[T]{
-		store:     store,
+	return &SelfSupplier[T]{
+		lookup:    lookup,
 		kind:      kind,
 		fieldVals: fieldVals,
 	}, nil
 }
 
-type StoreSupplier[T any] struct {
-	store Store[T]
-	kind  string
+type SelfSupplier[T any] struct {
+	lookup func(ctx context.Context, filter map[string]any) (T, error)
+	kind   string
 	// a struct or pointer to struct whose fields can be used in filters
 	fieldVals map[string]reflect.Value
 }
 
-func (b *StoreSupplier[T]) Fill(ctx context.Context, value string, options []string, dst any) (bool, error) {
+func (b *SelfSupplier[T]) Fill(ctx context.Context, value string, options []string, dst any) (bool, error) {
 	options = append(options, value)
 	filter := map[string]any{}
 
@@ -54,7 +52,7 @@ func (b *StoreSupplier[T]) Fill(ctx context.Context, value string, options []str
 		filter[key] = fieldValue
 	}
 
-	val, err := b.store(ctx, filter)
+	val, err := b.lookup(ctx, filter)
 	if err != nil {
 		return false, fmt.Errorf("error finding document: %w", err)
 	}
@@ -65,14 +63,14 @@ func (b *StoreSupplier[T]) Fill(ctx context.Context, value string, options []str
 	}
 	rv = rv.Elem()
 	if reflect.TypeOf(val) != rv.Type() {
-		return false, fmt.Errorf("type mismatch: store returned %T but dst is %T", val, dst)
+		return false, fmt.Errorf("type mismatch: lookup returned %T but dst is %T", val, dst)
 	}
 	rv.Set(reflect.ValueOf(val))
 
 	return true, nil
 }
 
-func (b *StoreSupplier[T]) IsKind(kind string) bool {
+func (b *SelfSupplier[T]) IsKind(kind string) bool {
 	return b.kind == kind
 }
 
