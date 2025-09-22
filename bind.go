@@ -51,41 +51,60 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 			continue
 		}
 
-		// Create one instance of the value to fill.
 		val := reflect.New(fv.Type()).Interface()
 
-		var filled bool
-		for _, cand := range fb.Candidates {
-			supplier := getSupplier(suppliers, cand.Kind)
-			if supplier == nil {
-				continue
-			}
+		if f, ok := lazyFactories.Load(fv.Type()); ok {
+			v := f.(func(any) any)(func(ctx context.Context, t *any) error {
+				_, err := applySuppliers(ctx, suppliers, dstReflectType, fb, t, options)
+				return err
+			})
 
-			ok, err := supplier.Fill(ctx, cand.Value, cand.Options, val)
-			if err != nil {
-				return fmt.Errorf("fill %s (%s): %w", cand.Value, cand.Kind, err)
-			}
-			if ok {
-				fv.Set(reflect.ValueOf(val).Elem())
-				filled = true
-				break
-			}
+			fv.Set(reflect.ValueOf(v))
+			continue
 		}
 
-		if !filled {
-			options.logger.DebugContext(ctx, "no supplier matched",
-				slog.String("field", dstReflectType.Field(fb.FieldIndex).Name),
-				slog.String("dst_struct_type", dstReflectType.Name()),
-			)
-			if fb.Options.Required {
-				return fmt.Errorf("required field '%s' (type '%s') not found",
-					dstReflectType.Field(fb.FieldIndex).Name,
-					dstReflectType.Field(fb.FieldIndex).Type.String(),
-				)
-			}
+		foundVal, err := applySuppliers(ctx, suppliers, dstReflectType, fb, val, options)
+		if err != nil {
+			return err
 		}
+		if foundVal == nil {
+			continue
+		}
+
+		fv.Set(*foundVal)
 	}
 	return nil
+}
+
+func applySuppliers(ctx context.Context, suppliers []Supplier, fullValue reflect.Type, fb FieldBinding, val any, options *options) (*reflect.Value, error) {
+	for _, cand := range fb.Candidates {
+		supplier := getSupplier(suppliers, cand.Kind)
+		if supplier == nil {
+			continue
+		}
+
+		ok, err := supplier.Fill(ctx, cand.Value, cand.Options, val)
+		if err != nil {
+			return nil, fmt.Errorf("fill %s (%s): %w", cand.Value, cand.Kind, err)
+		}
+		if ok {
+			val := reflect.ValueOf(val).Elem()
+			return &val, nil
+		}
+	}
+
+	options.logger.DebugContext(ctx, "no supplier matched",
+		slog.String("field", fullValue.Field(fb.FieldIndex).Name),
+		slog.String("dst_struct_type", fullValue.Name()),
+	)
+	if fb.Options.Required {
+		return nil, fmt.Errorf("required field '%s' (type '%s') not found",
+			fullValue.Field(fb.FieldIndex).Name,
+			fullValue.Field(fb.FieldIndex).Type.String(),
+		)
+	}
+
+	return nil, nil
 }
 
 func getSupplier(suppliers []Supplier, kind string) Supplier {
