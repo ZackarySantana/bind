@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"reflect"
+	"strings"
 )
 
 // Supplier fills a specific field from a named key (per tag kind).
@@ -65,6 +66,12 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 
 		foundVal, err := applySuppliers(ctx, suppliers, dstReflectType, fb, val, options)
 		if err != nil {
+			if strings.Contains(err.Error(), "bind.Lazy[") {
+				err = fmt.Errorf("field '%s' (type '%s') uses unregistered Lazy type; did you forget to call bind.RegisterLazy?",
+					dstReflectType.Field(fb.FieldIndex).Name,
+					dstReflectType.Field(fb.FieldIndex).Type.String(),
+				)
+			}
 			return err
 		}
 		if foundVal == nil {
