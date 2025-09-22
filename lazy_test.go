@@ -8,10 +8,10 @@ import (
 )
 
 type lazyVal struct {
-	String Lazy[string] `json:"string"`
-	// Int    Lazy[int]     `json:"int"`
-	Float Lazy[float64] `json:"float"`
-	Bool  Lazy[bool]    `json:"bool"`
+	String Lazy[string]  `json:"string"`
+	Int    Lazy[int]     `json:"int"`
+	Float  Lazy[float64] `json:"float"`
+	Bool   Lazy[bool]    `json:"bool"`
 }
 
 func TestLazy(t *testing.T) {
@@ -29,9 +29,9 @@ func TestLazy(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "hello", str)
 
-	// i, err := destination.Int.Get(t.Context())
-	// require.NoError(t, err)
-	// assert.Equal(t, 123, i)
+	i, err := destination.Int.Get(t.Context())
+	require.NoError(t, err)
+	assert.Equal(t, 123, i)
 
 	f, err := destination.Float.Get(t.Context())
 	require.NoError(t, err)

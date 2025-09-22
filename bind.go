@@ -54,7 +54,7 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 		val := reflect.New(fv.Type()).Interface()
 
 		if f, ok := lazyFactories.Load(fv.Type()); ok {
-			v := f.(func(any) any)(func(ctx context.Context, t *any) error {
+			v := f.(func(any) any)(func(ctx context.Context, t any) error {
 				_, err := applySuppliers(ctx, suppliers, dstReflectType, fb, t, options)
 				return err
 			})
