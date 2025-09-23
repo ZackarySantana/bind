@@ -37,6 +37,7 @@ func TestLazy(t *testing.T) {
 	})
 
 	var customReturn string
+	customRanCount := 0
 	destination := lazyVal{}
 	require.NoError(t, Bind(t.Context(), &destination, []Supplier{
 		createJSONSupplier(t, `{
@@ -47,6 +48,7 @@ func TestLazy(t *testing.T) {
 			"struct": {"SomeValue": "value", "Other": 42}
 		}`),
 		NewFuncStringSupplier(func(ctx context.Context, name string, options []string) (string, error) {
+			customRanCount++
 			return customReturn, nil
 		}, "custom"),
 	}))
@@ -86,15 +88,18 @@ func TestLazy(t *testing.T) {
 	})
 
 	t.Run("Custom", func(t *testing.T) {
+		assert.Equal(t, 0, customRanCount)
 		custom, err := destination.Custom.Get(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, customReturn, custom)
+		assert.Equal(t, 1, customRanCount)
 
 		t.Run("NotCached", func(t *testing.T) {
 			customReturn = "new value"
 			custom, err = destination.Custom.Get(t.Context())
 			require.NoError(t, err)
 			assert.Equal(t, customReturn, custom)
+			assert.Equal(t, 2, customRanCount)
 		})
 	})
 
