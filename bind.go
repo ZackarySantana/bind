@@ -64,6 +64,16 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 			continue
 		}
 
+		if f, ok := cacheFactories.Load(fv.Type()); ok {
+			v := f.(func(any) any)(func(ctx context.Context, t any) error {
+				_, err := applySuppliers(ctx, suppliers, dstReflectType, fb, t, options)
+				return err
+			})
+
+			fv.Set(reflect.ValueOf(v))
+			continue
+		}
+
 		foundVal, err := applySuppliers(ctx, suppliers, dstReflectType, fb, val, options)
 		if err != nil {
 			if strings.Contains(err.Error(), "bind.Lazy[") {
