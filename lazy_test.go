@@ -19,6 +19,7 @@ type lazyVal struct {
 	Float  Lazy[float64]          `json:"float"`
 	Bool   Lazy[bool]             `json:"bool"`
 	Struct Lazy[registeredStruct] `json:"struct"`
+	Custom Lazy[string]           `custom:"value"`
 }
 
 type unregisteredStruct struct {
@@ -35,6 +36,7 @@ func TestLazy(t *testing.T) {
 		return wrapLazy[registeredStruct](loader)
 	})
 
+	var customReturn string
 	destination := lazyVal{}
 	require.NoError(t, Bind(t.Context(), &destination, []Supplier{
 		createJSONSupplier(t, `{
@@ -44,10 +46,17 @@ func TestLazy(t *testing.T) {
 			"bool": true,
 			"struct": {"SomeValue": "value", "Other": 42}
 		}`),
+		NewFuncStringSupplier(func(ctx context.Context, name string, options []string) (string, error) {
+			return customReturn, nil
+		}, "custom"),
 	}))
 
 	t.Run("String", func(t *testing.T) {
 		str, err := destination.String.Get(t.Context())
+		require.NoError(t, err)
+		assert.Equal(t, "hello", str)
+
+		str, err = destination.String.Get(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, "hello", str)
 	})
@@ -74,6 +83,19 @@ func TestLazy(t *testing.T) {
 		s, err := destination.Struct.Get(t.Context())
 		require.NoError(t, err)
 		assert.Equal(t, registeredStruct{SomeValue: "value", Other: 42}, s)
+	})
+
+	t.Run("Custom", func(t *testing.T) {
+		custom, err := destination.Custom.Get(t.Context())
+		require.NoError(t, err)
+		assert.Equal(t, customReturn, custom)
+
+		t.Run("NotCached", func(t *testing.T) {
+			customReturn = "new value"
+			custom, err = destination.Custom.Get(t.Context())
+			require.NoError(t, err)
+			assert.Equal(t, customReturn, custom)
+		})
 	})
 
 	t.Run("UnregisteredStruct", func(t *testing.T) {
