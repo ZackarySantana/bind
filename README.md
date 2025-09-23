@@ -157,6 +157,24 @@ age, err := t.Age.Get(ctx) // Calls the supplier function to get the age
 fmt.Println(age) // 30
 ```
 
+#### Registering Lazy Types
+
+Golang's type system does not allow for generic types to be used directly in reflection. Therefore, you must register each `bind.Lazy` type you intend to use with the `bind.RegisterLazyType` function.
+
+```go
+type myType struct {
+    Value string
+}
+
+func init() {
+    bind.RegisterLazy(func(loader LazyLoader) Lazy[myType] {
+        return AsLazy[myType](loader)
+    })
+}
+```
+
+This registers it for `bind.Cache` as well.
+
 ### Cache
 
 Bind also provides a `bind.Cache` type that can be used to cache the result of a supplier function. This is useful for expensive operations that you want to avoid repeating.

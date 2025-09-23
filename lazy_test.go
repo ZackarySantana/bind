@@ -32,8 +32,8 @@ type lazyValUnreg struct {
 }
 
 func TestLazy(t *testing.T) {
-	RegisterLazy(func(loader func(context.Context, any) error) Lazy[registeredStruct] {
-		return wrapLazy[registeredStruct](loader)
+	RegisterLazy(func(loader LazyLoader) Lazy[registeredStruct] {
+		return AsLazy[registeredStruct](loader)
 	})
 
 	var customReturn string

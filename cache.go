@@ -10,11 +10,11 @@ var cacheFactories sync.Map // map[reflect.Type]func(loader any) any
 
 type Cache[T any] Lazy[T]
 
-func registerCache[T any](factory func(func(context.Context, any) error) Lazy[T]) {
+func registerCache[T any](factory func(LazyLoader) Lazy[T]) {
 	it := reflect.TypeOf((*Cache[T])(nil)).Elem()
 	cacheFactories.Store(it, func(loader any) any {
 		return &cacheImpl[T]{
-			Lazy: factory(loader.(func(context.Context, any) error)),
+			Lazy: factory(loader.(LazyLoader)),
 		}
 	})
 }

@@ -55,20 +55,22 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 		val := reflect.New(fv.Type()).Interface()
 
 		if f, ok := lazyFactories.Load(fv.Type()); ok {
-			v := f.(func(any) any)(func(ctx context.Context, t any) error {
+			var loader LazyLoader = func(ctx context.Context, t any) error {
 				_, err := applySuppliers(ctx, suppliers, dstReflectType, fb, t, options)
 				return err
-			})
+			}
+			v := f.(func(any) any)(loader)
 
 			fv.Set(reflect.ValueOf(v))
 			continue
 		}
 
 		if f, ok := cacheFactories.Load(fv.Type()); ok {
-			v := f.(func(any) any)(func(ctx context.Context, t any) error {
+			var loader LazyLoader = func(ctx context.Context, t any) error {
 				_, err := applySuppliers(ctx, suppliers, dstReflectType, fb, t, options)
 				return err
-			})
+			}
+			v := f.(func(any) any)(loader)
 
 			fv.Set(reflect.ValueOf(v))
 			continue
