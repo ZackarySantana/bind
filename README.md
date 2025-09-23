@@ -12,6 +12,7 @@ A flexible binding library for Go that maps external values (YAML, JSON, CLI arg
 -   [Usage](#usage)
     -   [Options](#options)
     -   [Options Struct Tag](#options-struct-tag)
+    -   [Lazy](#lazy)
 -   [Suppliers](#suppliers)
     -   [JSONSupplier](#jsonsupplier)
     -   [YAMLSupplier](#yamlsupplier)
@@ -89,11 +90,11 @@ bind.Bind(ctx, &var, suppliers)
 bind.Bind(ctx, &var, suppliers, bind.WithLevel(2))
 ```
 
-## Options Struct Tag
+### Options Struct Tag
 
 The `options` struct tag allows you to specify additional options for each field.
 
-### Required
+#### Required
 
 **Example:**
 
@@ -109,7 +110,7 @@ jsonSup, _ := bind.NewJSONSupplier(strings.NewReader(`{"age":30}`))
 err := bind.Bind(ctx, &test, []bind.Supplier{jsonSup})
 ```
 
-### Level
+#### Level
 
 **Example:**
 
@@ -124,6 +125,35 @@ jsonSup, _ := bind.NewJSONSupplier(strings.NewReader(`{"retries":3,"name":"Alice
 
 // Only the Retries and Name fields will be set.
 bind.Bind(ctx, &test, []bind.Supplier{jsonSup})
+```
+
+### Lazy
+
+There's a built-in 'lazy' type that can be used to defer the loading of a value until it's actually needed. This is useful for operations that aren't always required, such as fetching data from a database or making an API call.
+
+**Example:**
+
+```go
+type test struct {
+    Name string         `json:"name"`
+    Age  bind.Lazy[int] `database:"age"`
+}
+```
+
+This exposes an `Get` method on the `Age` field that will call the supplier function to fetch the value when needed.
+
+```go
+var t test
+jsonSup, _ := bind.NewJSONSupplier(strings.NewReader(`{"name":"Alice"}`))
+dbSup, _ := bind.NewSelfSupplier(func(ctx context.Context, filter map[string]any) (int, error) {
+    // Simulate a database call
+    return 30, nil
+}, "database", &t)
+
+err := bind.Bind(ctx, &t, []bind.Supplier{jsonSup, dbSup})
+fmt.Println(t.Name) // "Alice"
+age, err := t.Age.Get(ctx) // Calls the supplier function to get the age
+fmt.Println(age) // 30
 ```
 
 ## Suppliers
