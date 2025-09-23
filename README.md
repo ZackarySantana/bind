@@ -13,6 +13,7 @@ A flexible binding library for Go that maps external values (YAML, JSON, CLI arg
     -   [Options](#options)
     -   [Options Struct Tag](#options-struct-tag)
     -   [Lazy](#lazy)
+    -   [Cache](#cache)
 -   [Suppliers](#suppliers)
     -   [JSONSupplier](#jsonsupplier)
     -   [YAMLSupplier](#yamlsupplier)
@@ -129,7 +130,7 @@ bind.Bind(ctx, &test, []bind.Supplier{jsonSup})
 
 ### Lazy
 
-There's a built-in 'lazy' type that can be used to defer the loading of a value until it's actually needed. This is useful for operations that aren't always required, such as fetching data from a database or making an API call.
+Bind supplies a `bind.Lazy` type that can be used to defer the loading of a value until needed. This is useful for operations that aren't always required, such as fetching data from a database or making an API call.
 
 **Example:**
 
@@ -155,6 +156,11 @@ fmt.Println(t.Name) // "Alice"
 age, err := t.Age.Get(ctx) // Calls the supplier function to get the age
 fmt.Println(age) // 30
 ```
+
+### Cache
+
+Bind also provides a `bind.Cache` type that can be used to cache the result of a supplier function. This is useful for expensive operations that you want to avoid repeating.
+The usage is exactly the same as `bind.Lazy`, but the result is cached after the first call. If you want up-to-date values, use `bind.Lazy` instead.
 
 ## Suppliers
 
