@@ -1,4 +1,4 @@
-package bind
+package bind_test
 
 import (
 	"math"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zackarysantana/bind"
 )
 
 type nested struct {
@@ -47,19 +48,19 @@ type requiredAndLevel struct {
 }
 
 func TestBind(t *testing.T) {
-	pathSup := func(t *testing.T, pathValues map[string]string) Supplier {
+	pathSup := func(t *testing.T, pathValues map[string]string) bind.Supplier {
 		req := &http.Request{}
 		for key, val := range pathValues {
 			req.SetPathValue(key, val)
 		}
-		ps, err := NewPathSupplier(req)
+		ps, err := bind.NewPathSupplier(req)
 		require.NoError(t, err)
 		return ps
 	}
 	s := "hello"
 
 	for name, tc := range map[string]struct {
-		suppliers           []Supplier
+		suppliers           []bind.Supplier
 		level               float64
 		destination         any
 		expected            any
@@ -67,37 +68,37 @@ func TestBind(t *testing.T) {
 		expectedErrContains string
 	}{
 		"Error/NilDestination": {
-			expectedErr: ErrNilDestination,
+			expectedErr: bind.ErrNilDestination,
 		},
 		"Error/NonPointerDestination": {
 			destination: mixed{},
-			expectedErr: ErrNonPointer,
+			expectedErr: bind.ErrNonPointer,
 		},
 		"Error/NonStructPointerDestination": {
 			destination: new(int),
-			expectedErr: ErrNonStructPtr,
+			expectedErr: bind.ErrNonStructPtr,
 		},
 		"NoSuppliersFillsNothing": {
 			destination: &mixed{},
 			expected:    &mixed{},
 		},
 		"RequiredFieldMissing": {
-			suppliers:           []Supplier{createJSONSupplier(t, `{"mustnt":"present"}`)},
+			suppliers:           []bind.Supplier{createJSONSupplier(t, `{"mustnt":"present"}`)},
 			destination:         &required{},
 			expectedErrContains: "required field 'Must' (type 'string') not found",
 		},
 		"RequiredFieldFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"must":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"must":"present"}`)},
 			destination: &required{},
 			expected:    &required{Must: "present"},
 		},
 		"HigherLevelsNotFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			destination: &level{},
 			expected:    &level{},
 		},
 		"LowerLevelFilledHigherLevelNotFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			level:       2,
 			destination: &level{},
 			expected: &level{
@@ -105,7 +106,7 @@ func TestBind(t *testing.T) {
 			},
 		},
 		"AllLevelsFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			level:       5,
 			destination: &level{},
 			expected: &level{
@@ -114,12 +115,12 @@ func TestBind(t *testing.T) {
 			},
 		},
 		"RequiredAndLevel/HigherLevelsNotFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			destination: &requiredAndLevel{},
 			expected:    &requiredAndLevel{},
 		},
 		"RequiredAndLevel/HighestLevelNotFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			level:       2,
 			destination: &requiredAndLevel{},
 			expected: &requiredAndLevel{
@@ -127,7 +128,7 @@ func TestBind(t *testing.T) {
 			},
 		},
 		"RequiredAndLevel/AllLevelsFilled": {
-			suppliers:   []Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
+			suppliers:   []bind.Supplier{createJSONSupplier(t, `{"lvl2":"present","lvl5":"present"}`)},
 			level:       5,
 			destination: &requiredAndLevel{},
 			expected: &requiredAndLevel{
@@ -136,13 +137,13 @@ func TestBind(t *testing.T) {
 			},
 		},
 		"RequiredAndLevel/LevelAllowedButNotFilledError": {
-			suppliers:           []Supplier{createJSONSupplier(t, `{}`)},
+			suppliers:           []bind.Supplier{createJSONSupplier(t, `{}`)},
 			level:               2,
 			destination:         &requiredAndLevel{},
 			expectedErrContains: "required field 'Lvl2' (type 'string') not found",
 		},
 		"IgnoresAlreadySetFields": {
-			suppliers: []Supplier{createJSONSupplier(t, `{"int":7,"float":9.42}`)},
+			suppliers: []bind.Supplier{createJSONSupplier(t, `{"int":7,"float":9.42}`)},
 			destination: &mixed{
 				Int: 3,
 			},
@@ -152,7 +153,7 @@ func TestBind(t *testing.T) {
 			},
 		},
 		"MultipleSuppliers": {
-			suppliers: []Supplier{
+			suppliers: []bind.Supplier{
 				createJSONSupplier(t, `{
 					"int": 7,
 					"float": 3.14,
@@ -186,7 +187,7 @@ func TestBind(t *testing.T) {
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
-			err := Bind(t.Context(), tc.destination, tc.suppliers, WithLevel(int(math.Max(tc.level, 1))))
+			err := bind.Bind(t.Context(), tc.destination, tc.suppliers, bind.WithLevel(int(math.Max(tc.level, 1))))
 
 			if tc.expectedErr != nil {
 				require.Error(t, err)
@@ -202,57 +203,4 @@ func TestBind(t *testing.T) {
 			assert.Equal(t, tc.expected, tc.destination)
 		})
 	}
-}
-
-// runSupplierTests is a shared test util that suppliers use
-// to test themselves.
-func runSupplierTests(t *testing.T, s Supplier, emptySupplier Supplier, wantKind string) {
-	t.Helper()
-
-	t.Run("Fill", func(t *testing.T) {
-		t.Run("Missing", func(t *testing.T) {
-			var v string
-			ok, err := s.Fill(t.Context(), keyMissing, nil, &v)
-			require.NoError(t, err)
-			require.False(t, ok)
-			assert.Empty(t, v)
-		})
-		t.Run("Empty", func(t *testing.T) {
-			var v string
-			ok, err := emptySupplier.Fill(t.Context(), "empty", nil, &v)
-			require.NoError(t, err)
-			require.False(t, ok)
-			assert.Empty(t, v)
-		})
-		t.Run("String", func(t *testing.T) {
-			var v string
-			ok, err := s.Fill(t.Context(), keyStr, nil, &v)
-			require.NoError(t, err)
-			require.True(t, ok)
-			assert.Equal(t, valStr, v)
-		})
-		t.Run("Int", func(t *testing.T) {
-			var v int
-			ok, err := s.Fill(t.Context(), keyInt, nil, &v)
-			require.NoError(t, err)
-			require.True(t, ok)
-			assert.Equal(t, 123, v)
-		})
-	})
-
-	t.Run("Kind", func(t *testing.T) {
-		assert.True(t, s.IsKind(wantKind))
-	})
-}
-
-func runNestedSupplierTest(t *testing.T, s Supplier) {
-	t.Run("Struct", func(t *testing.T) {
-		var v struct {
-			Bar string `json:"bar"`
-		}
-		ok, err := s.Fill(t.Context(), keyNested, nil, &v)
-		require.NoError(t, err)
-		require.True(t, ok)
-		assert.Equal(t, "baz", v.Bar)
-	})
 }

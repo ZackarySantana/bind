@@ -96,6 +96,7 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 }
 
 func applySuppliers(ctx context.Context, suppliers []Supplier, fullValue reflect.Type, fb FieldBinding, val any, options *options) (*reflect.Value, error) {
+	ctx = setMetaOptions(ctx, fb.Options.Options)
 	for _, cand := range fb.Candidates {
 		supplier := getSupplier(suppliers, cand.Kind)
 		if supplier == nil {

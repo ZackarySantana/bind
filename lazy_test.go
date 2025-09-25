@@ -1,4 +1,4 @@
-package bind
+package bind_test
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zackarysantana/bind"
 )
 
 type registeredStruct struct {
@@ -14,12 +15,12 @@ type registeredStruct struct {
 }
 
 type lazyVal struct {
-	String Lazy[string]           `json:"string"`
-	Int    Lazy[int]              `json:"int"`
-	Float  Lazy[float64]          `json:"float"`
-	Bool   Lazy[bool]             `json:"bool"`
-	Struct Lazy[registeredStruct] `json:"struct"`
-	Custom Lazy[string]           `custom:"value"`
+	String bind.Lazy[string]           `json:"string"`
+	Int    bind.Lazy[int]              `json:"int"`
+	Float  bind.Lazy[float64]          `json:"float"`
+	Bool   bind.Lazy[bool]             `json:"bool"`
+	Struct bind.Lazy[registeredStruct] `json:"struct"`
+	Custom bind.Lazy[string]           `custom:"value"`
 }
 
 type unregisteredStruct struct {
@@ -28,18 +29,18 @@ type unregisteredStruct struct {
 }
 
 type lazyValUnreg struct {
-	Unreg Lazy[unregisteredStruct] `json:"unreg"`
+	Unreg bind.Lazy[unregisteredStruct] `json:"unreg"`
 }
 
 func TestLazy(t *testing.T) {
-	RegisterLazy(func(loader LazyLoader) Lazy[registeredStruct] {
-		return AsLazy[registeredStruct](loader)
+	bind.RegisterLazy(func(loader bind.LazyLoader) bind.Lazy[registeredStruct] {
+		return bind.AsLazy[registeredStruct](loader)
 	})
 
 	var customReturn string
 	customRanCount := 0
 	destination := lazyVal{}
-	require.NoError(t, Bind(t.Context(), &destination, []Supplier{
+	require.NoError(t, bind.Bind(t.Context(), &destination, []bind.Supplier{
 		createJSONSupplier(t, `{
 			"string": "hello",
 			"int": 123,
@@ -47,7 +48,7 @@ func TestLazy(t *testing.T) {
 			"bool": true,
 			"struct": {"SomeValue": "value", "Other": 42}
 		}`),
-		NewFuncStringSupplier(func(ctx context.Context, name string, options []string) (string, error) {
+		bind.NewFuncStringSupplier(func(ctx context.Context, name string, options []string) (string, error) {
 			customRanCount++
 			return customReturn, nil
 		}, "custom"),
@@ -105,7 +106,7 @@ func TestLazy(t *testing.T) {
 
 	t.Run("UnregisteredStruct", func(t *testing.T) {
 		destination := lazyValUnreg{}
-		require.ErrorContains(t, Bind(t.Context(), &destination, []Supplier{
+		require.ErrorContains(t, bind.Bind(t.Context(), &destination, []bind.Supplier{
 			createJSONSupplier(t, `{
 				"unreg": {"SomeValue": "value", "Other": 42}
 			}`),

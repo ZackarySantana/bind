@@ -1,6 +1,7 @@
 package bind
 
 import (
+	"context"
 	"reflect"
 	"strconv"
 	"strings"
@@ -13,6 +14,12 @@ const (
 	LevelTag    = "level"
 
 	DefaultLevel = 1
+)
+
+type optionsContextKeyType struct{}
+
+var (
+	optionsContextKey = optionsContextKeyType{}
 )
 
 // FieldBinding represents one destination struct field with zero or more tag candidates.
@@ -125,6 +132,19 @@ func (t *TagCandidate) parseOptions(options []string) {
 		}
 		t.Options = append(t.Options, opt)
 	}
+}
+
+func setMetaOptions(ctx context.Context, metaOptions []string) context.Context {
+	return context.WithValue(ctx, optionsContextKey, metaOptions)
+}
+
+func GetMetaOptions(ctx context.Context) []string {
+	if opts := ctx.Value(optionsContextKey); opts != nil {
+		if opts, ok := opts.([]string); ok {
+			return opts
+		}
+	}
+	return nil
 }
 
 // getTags parses through a tag, collecting all key:"value" pairs into a map.

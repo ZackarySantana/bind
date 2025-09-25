@@ -1,6 +1,6 @@
 module github.com/zackarysantana/bind/modules/mongodb
 
-go 1.25.1
+go 1.24.5
 
 require (
 	github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6

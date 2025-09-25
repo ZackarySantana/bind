@@ -1,23 +1,23 @@
-package bind_test
+package yaml
 
 import (
 	"bytes"
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"github.com/zackarysantana/bind"
 	"github.com/zackarysantana/bind/testutil"
+	"gopkg.in/yaml.v3"
 )
 
-func createJSONSupplier(t *testing.T, s string) bind.Supplier {
+func createYAMLSupplier(t *testing.T, s string) bind.Supplier {
 	t.Helper()
-	js, err := bind.NewJSONSupplier(bytes.NewBuffer([]byte(s)))
+	js, err := New(bytes.NewBuffer([]byte(s)))
 	require.NoError(t, err)
 	return js
 }
 
-func TestJSONSupplier(t *testing.T) {
+func TestYAMLSupplier(t *testing.T) {
 	m := map[string]any{
 		testutil.KeyStr: testutil.ValStr,
 		testutil.KeyInt: testutil.ValInt,
@@ -26,12 +26,12 @@ func TestJSONSupplier(t *testing.T) {
 		},
 	}
 
-	json, err := json.Marshal(m)
+	yaml, err := yaml.Marshal(m)
 	require.NoError(t, err)
 
-	s := createJSONSupplier(t, string(json))
-	empty := createJSONSupplier(t, "")
+	s := createYAMLSupplier(t, string(yaml))
+	empty := createYAMLSupplier(t, "")
 
-	testutil.RunSupplierTests(t, s, empty, bind.TagJSON)
+	testutil.RunSupplierTests(t, s, empty, TagYAML)
 	testutil.RunNestedSupplierTest(t, s)
 }

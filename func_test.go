@@ -1,4 +1,4 @@
-package bind
+package bind_test
 
 import (
 	"flag"
@@ -10,109 +10,98 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-)
-
-// Shared dataset keys and values used across all suppliers.
-const (
-	keyMissing = "missing"
-	keyStr     = "str"
-	keyInt     = "integer"
-	keyNested  = "nested"
-
-	valStr    = "bar"
-	valInt    = 123
-	nestedKey = "bar"
-	valNested = "baz"
+	"github.com/zackarysantana/bind"
+	"github.com/zackarysantana/bind/testutil"
 )
 
 // runCommonSupplierTests runs the same assertions against any Supplier.
 
 func TestPathSupplier(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "http://example.org/resource", nil)
-	req.SetPathValue(keyStr, valStr)
-	req.SetPathValue(keyInt, fmt.Sprint(valInt))
+	req.SetPathValue(testutil.KeyStr, testutil.ValStr)
+	req.SetPathValue(testutil.KeyInt, fmt.Sprint(testutil.ValInt))
 
-	s, err := NewPathSupplier(req)
+	s, err := bind.NewPathSupplier(req)
 	require.NoError(t, err)
 
-	empty, err := NewPathSupplier(httptest.NewRequest(http.MethodGet, "http://example.org/resource", nil))
+	empty, err := bind.NewPathSupplier(httptest.NewRequest(http.MethodGet, "http://example.org/resource", nil))
 	require.NoError(t, err)
 
-	runSupplierTests(t, s, empty, TagPath)
+	testutil.RunSupplierTests(t, s, empty, bind.TagPath)
 }
 
 func TestQuerySupplier(t *testing.T) {
 	q := url.Values{}
-	q.Set(keyStr, valStr)             // ?str=bar
-	q.Set(keyInt, fmt.Sprint(valInt)) // ?integer=123
+	q.Set(testutil.KeyStr, testutil.ValStr)             // ?str=bar
+	q.Set(testutil.KeyInt, fmt.Sprint(testutil.ValInt)) // ?integer=123
 
 	u, err := url.Parse("http://example.org/search?" + q.Encode())
 	require.NoError(t, err)
 
-	s, err := NewQuerySupplier(u)
+	s, err := bind.NewQuerySupplier(u)
 	require.NoError(t, err)
 
-	empty, err := NewQuerySupplier(&url.URL{})
+	empty, err := bind.NewQuerySupplier(&url.URL{})
 	require.NoError(t, err)
 
-	runSupplierTests(t, s, empty, TagQuery)
+	testutil.RunSupplierTests(t, s, empty, bind.TagQuery)
 }
 
 func TestHeaderSupplier(t *testing.T) {
 	h := http.Header{}
-	h.Set(keyStr, valStr)
-	h.Set(keyInt, fmt.Sprint(valInt))
+	h.Set(testutil.KeyStr, testutil.ValStr)
+	h.Set(testutil.KeyInt, fmt.Sprint(testutil.ValInt))
 
-	s, err := NewHeaderSupplier(h)
+	s, err := bind.NewHeaderSupplier(h)
 	require.NoError(t, err)
 
-	empty, err := NewHeaderSupplier(http.Header{})
+	empty, err := bind.NewHeaderSupplier(http.Header{})
 	require.NoError(t, err)
 
-	runSupplierTests(t, s, empty, TagHeader)
+	testutil.RunSupplierTests(t, s, empty, bind.TagHeader)
 }
 
 func TestFormSupplier(t *testing.T) {
 	form := url.Values{}
-	form.Set(keyStr, valStr)
-	form.Set(keyInt, fmt.Sprint(valInt))
+	form.Set(testutil.KeyStr, testutil.ValStr)
+	form.Set(testutil.KeyInt, fmt.Sprint(testutil.ValInt))
 
 	req := httptest.NewRequest(http.MethodPost, "http://example.org/form", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	s, err := NewFormSupplier(req)
+	s, err := bind.NewFormSupplier(req)
 	require.NoError(t, err)
 
-	empty, err := NewFormSupplier(httptest.NewRequest(http.MethodPost, "http://example.org/form", nil))
+	empty, err := bind.NewFormSupplier(httptest.NewRequest(http.MethodPost, "http://example.org/form", nil))
 	require.NoError(t, err)
 
-	runSupplierTests(t, s, empty, TagForm)
+	testutil.RunSupplierTests(t, s, empty, bind.TagForm)
 }
 
 func TestEnvSupplier(t *testing.T) {
 	// Ensure environment matches the shared dataset.
-	t.Setenv(keyStr, valStr)
-	t.Setenv(keyInt, fmt.Sprint(valInt))
+	t.Setenv(testutil.KeyStr, testutil.ValStr)
+	t.Setenv(testutil.KeyInt, fmt.Sprint(testutil.ValInt))
 
-	s := NewEnvSupplier()
-	runSupplierTests(t, s, s, TagEnv)
+	s := bind.NewEnvSupplier()
+	testutil.RunSupplierTests(t, s, s, bind.TagEnv)
 }
 
 func TestFlagSupplier(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	_ = fs.String(keyStr, "", "string")
-	_ = fs.String(keyInt, "", "integer")
-	_ = fs.String(keyNested, "", "nested json")
+	_ = fs.String(testutil.KeyStr, "", "desc: string")
+	_ = fs.String(testutil.KeyInt, "", "desc: integer")
+	_ = fs.String(testutil.KeyNested, "", "desc: nested json")
 	// Note: missing is intentionally not defined or set.
 
 	args := []string{
-		"-" + keyStr, valStr,
-		"-" + keyInt, fmt.Sprint(valInt),
+		"-" + testutil.KeyStr, testutil.ValStr,
+		"-" + testutil.KeyInt, fmt.Sprint(testutil.ValInt),
 	}
 	require.NoError(t, fs.Parse(args))
 
-	s := NewFlagSupplier(fs)
-	empty := NewFlagSupplier(flag.NewFlagSet("test2", flag.ContinueOnError))
+	s := bind.NewFlagSupplier(fs)
+	empty := bind.NewFlagSupplier(flag.NewFlagSet("test2", flag.ContinueOnError))
 
-	runSupplierTests(t, s, empty, TagFlag)
+	testutil.RunSupplierTests(t, s, empty, bind.TagFlag)
 }

@@ -1,4 +1,4 @@
-package bind
+package yaml
 
 import (
 	"context"
@@ -16,8 +16,8 @@ type YAMLSupplier struct {
 	raw map[string]yaml.Node
 }
 
-// NewYAMLSupplier uses the given reader to supply YAML values.
-func NewYAMLSupplier(src io.Reader) (*YAMLSupplier, error) {
+// New uses the given reader to supply YAML values.
+func New(src io.Reader) (*YAMLSupplier, error) {
 	if src == nil {
 		// treat empty input as empty object (graceful)
 		return &YAMLSupplier{raw: map[string]yaml.Node{}}, nil
