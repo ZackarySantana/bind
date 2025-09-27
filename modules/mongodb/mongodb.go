@@ -52,7 +52,9 @@ func NewSupplier[T any](collection *mongo.Collection, ref any) (bind.Supplier, e
 // There's other built-in parsers for Int32, Int64, Float64, Bool, TimeRFC3339 and their Slice variants.
 // You can register your own parsers with RegisterParser.
 func NewExactSupplier[T any](collection *mongo.Collection) bind.Supplier {
-	return bind.NewFuncSupplier(func(ctx context.Context, _ string, options []string) (any, error) {
+	return bind.NewFuncSupplier(func(ctx context.Context, name string, options []string) (any, error) {
+		// The 'name' is also an option.
+		options = append(options, name)
 		var out T
 		filter, err := parser.BuildFilter(options)
 		if err != nil {
