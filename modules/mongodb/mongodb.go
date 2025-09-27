@@ -49,8 +49,7 @@ func NewSupplier[T any](collection *mongo.Collection, ref any) (bind.Supplier, e
 //
 //	{"_id": ObjectID(VALID_HEX_HERE), "name": "Name", "age": 30}
 //
-// There's other built-in parsers for Int32, Int64, Float64, Bool, TimeRFC3339 and their Slice variants.
-// You can register your own parsers with RegisterParser.
+// This supplier uses the [parser](https://pkg.go.dev/github.com/zackarysantana/bind/parser) package to parse the options into appropriate types.
 func NewExactSupplier[T any](collection *mongo.Collection) bind.Supplier {
 	return bind.NewFuncSupplier(func(ctx context.Context, name string, options []string) (any, error) {
 		// The 'name' is also an option.
