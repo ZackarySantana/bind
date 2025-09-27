@@ -6,6 +6,8 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6 h1:ibaEvRJobHrL2PK0yiVF/k78vE0LC/pB/o4CyRWeqgw=
 github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6/go.mod h1:pF1StZVLJwPd5qePVVxiUvkTxV/ZCsse3XNnhYbLpb4=
+github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b h1:aUaP0xcRbIe6Zr4TTUdovymSDw9gKuytmKYH0+x77VM=
+github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b/go.mod h1:2cHTSWXuMciyBMSH8KPvNVGAiNw/QKRgSDH3oliwIR4=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=

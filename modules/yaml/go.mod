@@ -3,9 +3,9 @@ module github.com/zackarysantana/bind/modules/yaml
 go 1.24.5
 
 require (
-	github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6
-	gopkg.in/yaml.v3 v3.0.1
 	github.com/stretchr/testify v1.11.1
+	github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

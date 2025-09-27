@@ -2,7 +2,7 @@ module github.com/zackarysantana/bind/modules/sql
 
 go 1.24.5
 
-require github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6
+require github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect

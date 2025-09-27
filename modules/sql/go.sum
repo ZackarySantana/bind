@@ -31,6 +31,8 @@ github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78/go.mod h1:aL8wCCfTfS
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6 h1:ibaEvRJobHrL2PK0yiVF/k78vE0LC/pB/o4CyRWeqgw=
 github.com/zackarysantana/bind v0.0.0-20250923024216-ca89f0c27ad6/go.mod h1:pF1StZVLJwPd5qePVVxiUvkTxV/ZCsse3XNnhYbLpb4=
+github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b h1:aUaP0xcRbIe6Zr4TTUdovymSDw9gKuytmKYH0+x77VM=
+github.com/zackarysantana/bind v0.0.0-20250925035000-e4da6820f86b/go.mod h1:2cHTSWXuMciyBMSH8KPvNVGAiNw/QKRgSDH3oliwIR4=
 go.mongodb.org/mongo-driver/v2 v2.3.0 h1:sh55yOXA2vUjW1QYw/2tRlHSQViwDyPnW61AwpZ4rtU=
 go.mongodb.org/mongo-driver/v2 v2.3.0/go.mod h1:jHeEDJHJq7tm6ZF45Issun9dbogjfnPySb1vXA7EeAI=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
