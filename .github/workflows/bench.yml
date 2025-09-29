@@ -41,7 +41,7 @@ jobs:
             - name: Run benches
               run: |
                   set -euo pipefail
-                  go test ./... $BENCH_ARGS | tee bench.txt
+                  go test ./... ./modules/* $BENCH_ARGS | tee bench.txt
 
             # Commits on main should update the gh-pages time-series & chart.
             - name: Publish benchmark chart (gh-pages)
