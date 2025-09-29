@@ -21,6 +21,7 @@ A flexible binding library for Go that maps external values (YAML, JSON, CLI arg
     -   [SelfSupplier](#selfsupplier)
     -   [Other Suppliers](#other-suppliers)
 -   [Testing](#testing)
+-   [Benchmarks](#benchmarks)
 -   [Contributing](#contributing)
 -   [License](#license)
 
@@ -308,7 +309,17 @@ bind.Bind(ctx, &u, []bind.Supplier{testSup, test2Sup})
 Run all tests with:
 
 ```bash
-go test ./...
+go test ./... ./modules*
+```
+
+## Benchmarks
+
+Benchmark graphs can be seen [here](https://zackarysantana.github.io/bind/bench/).
+
+Run all benchmarks with:
+
+```bash
+go test -bench=. -benchmem -run=^$ -benchtime=2s -count=4 ./... ./modules/*
 ```
 
 ## Contributing
