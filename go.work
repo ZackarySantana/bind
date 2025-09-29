@@ -1,8 +1,9 @@
 go 1.24.5
 
 use (
-    .
+	.
 	./modules/mongodb
+	./modules/sql
+	./modules/valkey
 	./modules/yaml
-    ./modules/sql
 )
