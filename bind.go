@@ -98,18 +98,24 @@ func Bind(ctx context.Context, dst any, suppliers []Supplier, opts ...Option) er
 func applySuppliers(ctx context.Context, suppliers []Supplier, fullValue reflect.Type, fb FieldBinding, val any, options *options) (*reflect.Value, error) {
 	ctx = setMetaOptions(ctx, fb.Options.Options)
 	for _, cand := range fb.Candidates {
-		supplier := getSupplier(suppliers, cand.Kind)
-		if supplier == nil {
-			continue
+		sups := getSuppliers(suppliers, cand.Kind)
+		if len(sups) == 0 {
+			if !options.testOnly {
+				continue
+			}
+			// In test mode, try all suppliers.
+			sups = suppliers
 		}
 
-		ok, err := supplier.Fill(ctx, cand.Value, cand.Options, val)
-		if err != nil {
-			return nil, fmt.Errorf("fill %s (%s): %w", cand.Value, cand.Kind, err)
-		}
-		if ok {
-			val := reflect.ValueOf(val).Elem()
-			return &val, nil
+		for _, supplier := range sups {
+			ok, err := supplier.Fill(ctx, cand.Value, cand.Options, val)
+			if err != nil {
+				return nil, fmt.Errorf("fill %s (%s): %w", cand.Value, cand.Kind, err)
+			}
+			if ok {
+				val := reflect.ValueOf(val).Elem()
+				return &val, nil
+			}
 		}
 	}
 
@@ -127,13 +133,14 @@ func applySuppliers(ctx context.Context, suppliers []Supplier, fullValue reflect
 	return nil, nil
 }
 
-func getSupplier(suppliers []Supplier, kind string) Supplier {
+func getSuppliers(suppliers []Supplier, kind string) []Supplier {
+	var result []Supplier
 	for _, s := range suppliers {
 		if s.IsKind(kind) {
-			return s
+			result = append(result, s)
 		}
 	}
-	return nil
+	return result
 }
 
 var (

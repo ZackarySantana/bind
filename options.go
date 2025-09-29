@@ -5,6 +5,8 @@ import "log/slog"
 type options struct {
 	logger *slog.Logger
 	level  int
+
+	testOnly bool
 }
 
 type Option func(*options)
@@ -20,5 +22,12 @@ func WithLogger(logger *slog.Logger) func(*options) {
 func WithLevel(level int) func(*options) {
 	return func(o *options) {
 		o.level = level
+	}
+}
+
+// WithTestOnly makes all suppliers match the struct tag `test-only`.
+func WithTestOnly() func(*options) {
+	return func(o *options) {
+		o.testOnly = true
 	}
 }
