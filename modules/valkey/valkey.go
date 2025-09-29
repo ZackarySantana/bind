@@ -14,6 +14,7 @@ const (
 func NewSupplier[T any](client *glide.Client, ref any) (bind.Supplier, error) {
 	return bind.NewSelfSupplier(func(ctx context.Context, filter map[string]any) (T, error) {
 		var out T
-		return out, client.Get(ctx, filter).Decode(&out)
+		return out, nil
+		// return out, client.Get(ctx, filter).Decode(&out)
 	}, TagValKey, ref)
 }
