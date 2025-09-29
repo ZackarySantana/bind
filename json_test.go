@@ -37,15 +37,15 @@ func TestJSONSupplier(t *testing.T) {
 }
 
 func BenchmarkJSON(b *testing.B) {
-	jsonData, err := json.Marshal(testutil.BenchBindData)
+	data, err := json.Marshal(testutil.BenchBindData)
 	if err != nil {
-		b.Fatalf("marshal JSON: %v", err)
+		b.Fatal(err)
 	}
 
 	testutil.RunBindBenchmark(b, func() []bind.Supplier {
-		sup, err := bind.NewJSONSupplier(bytes.NewReader(jsonData))
+		sup, err := bind.NewJSONSupplier(bytes.NewReader(data))
 		if err != nil {
-			b.Fatalf("new JSON supplier: %v", err)
+			b.Fatal(err)
 		}
 		return []bind.Supplier{sup}
 	})
