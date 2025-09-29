@@ -35,3 +35,18 @@ func TestYAMLSupplier(t *testing.T) {
 	testutil.RunSupplierTests(t, s, empty, TagYAML)
 	testutil.RunNestedSupplierTest(t, s)
 }
+
+func BenchmarkYAML(b *testing.B) {
+	data, err := yaml.Marshal(testutil.BenchBindData)
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	testutil.RunBindBenchmark(b, func() []bind.Supplier {
+		sup, err := New(bytes.NewReader(data))
+		if err != nil {
+			b.Fatal(err)
+		}
+		return []bind.Supplier{sup}
+	})
+}
