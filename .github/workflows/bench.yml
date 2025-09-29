@@ -1,0 +1,81 @@
+name: benchmark
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch: {}
+
+jobs:
+    bench:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write # Push to gh-pages branch.
+            pull-requests: write # Leave comments on PRs.
+        env:
+            GOMAXPROCS: "1"
+            BENCH_ARGS: -bench=. -benchmem -run=^$ -benchtime=4s -count=8
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: "1.24.5"
+
+            - name: Cache Go modules
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      ~/go/pkg/mod
+                      ~/.cache/go-build
+                  key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+                  restore-keys: |
+                      ${{ runner.os }}-go-
+
+            - name: Run benches
+              run: |
+                  set -euo pipefail
+                  go test ./... $BENCH_ARGS | tee bench.txt
+
+            # Commits on main should update the gh-pages time-series & chart.
+            - name: Publish benchmark chart (gh-pages)
+              if: github.event_name == 'push'
+              uses: rhysd/github-action-benchmark@v1
+              with:
+                  name: Go Benchmarks
+                  tool: "go"
+                  output-file-path: bench.txt
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  auto-push: true
+                  benchmark-data-dir-path: "bench"
+                  # alert on performance regressions in the time-series:
+                  alert-threshold: "5%"
+                  comment-on-alert: true
+                  fail-on-alert: false
+
+            # PRs should be analyzed but not update the gh-pages chart.
+            - name: Analyze PR benchmarks (no push)
+              if: github.event_name == 'pull_request'
+              uses: rhysd/github-action-benchmark@v1
+              with:
+                  name: Go Benchmarks
+                  tool: "go"
+                  output-file-path: bench.txt
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  auto-push: false
+                  benchmark-data-dir-path: "bench"
+                  alert-threshold: "5%"
+                  comment-on-alert: true
+                  fail-on-alert: true
+
+            - name: Upload raw bench output
+              uses: actions/upload-artifact@v4
+              with:
+                  name: bench-raw
+                  path: bench.txt
