@@ -99,3 +99,20 @@ func BuildFilter(options []string) (map[string]any, error) {
 	}
 	return filter, nil
 }
+
+// BuildValues builds a slice of values from the given options.
+// It parses each string as `TypeName(value)` or for strings `value`.
+// Built-in types are Int, Int32, Int64, Float64, Bool, Time (RFC3339 format)
+// and their Slice variants, e.g. `IntSlice(0,-1,5)`.
+// New types can be registered with Register.
+func BuildValues(options []string) ([]any, error) {
+	values := make([]any, 0, len(options))
+	for _, opt := range options {
+		parsedOption, err := parseValue(opt)
+		if err != nil {
+			return nil, fmt.Errorf("parsing %q: %w", opt, err)
+		}
+		values = append(values, parsedOption)
+	}
+	return values, nil
+}
