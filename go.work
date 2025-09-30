@@ -3,6 +3,7 @@ go 1.24.5
 use (
 	.
 	./modules/mongodb
+    ./modules/posthog
 	./modules/sql
 	./modules/valkey
 	./modules/yaml
