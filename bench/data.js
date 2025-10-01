@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1759200833790,
+  "lastUpdate": 1759278304978,
   "repoUrl": "https://github.com/ZackarySantana/bind",
   "entries": {
     "Go Benchmarks": [
@@ -2712,6 +2712,606 @@ window.BENCHMARK_DATA = {
             "value": 209,
             "unit": "allocs/op",
             "extra": "90151 times"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "64446617+ZackarySantana@users.noreply.github.com",
+            "name": "ZackarySantana",
+            "username": "ZackarySantana"
+          },
+          "committer": {
+            "email": "64446617+ZackarySantana@users.noreply.github.com",
+            "name": "ZackarySantana",
+            "username": "ZackarySantana"
+          },
+          "distinct": true,
+          "id": "2699208ec138f24a2e307c58e84a303416085e34",
+          "message": "feat(posthog): test it out!",
+          "timestamp": "2025-09-30T20:23:17-04:00",
+          "tree_id": "7300c1452f51687d4e5e0556b08954f207ce060c",
+          "url": "https://github.com/ZackarySantana/bind/commit/2699208ec138f24a2e307c58e84a303416085e34"
+        },
+        "date": 1759278304562,
+        "tool": "go",
+        "benches": [
+          {
+            "name": "BenchmarkJSON/Bind",
+            "value": 6347,
+            "unit": "ns/op\t    6144 B/op\t      63 allocs/op",
+            "extra": "384760 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - ns/op",
+            "value": 6347,
+            "unit": "ns/op",
+            "extra": "384760 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - B/op",
+            "value": 6144,
+            "unit": "B/op",
+            "extra": "384760 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - allocs/op",
+            "value": 63,
+            "unit": "allocs/op",
+            "extra": "384760 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind",
+            "value": 6328,
+            "unit": "ns/op\t    6144 B/op\t      63 allocs/op",
+            "extra": "374985 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - ns/op",
+            "value": 6328,
+            "unit": "ns/op",
+            "extra": "374985 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - B/op",
+            "value": 6144,
+            "unit": "B/op",
+            "extra": "374985 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - allocs/op",
+            "value": 63,
+            "unit": "allocs/op",
+            "extra": "374985 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind",
+            "value": 6274,
+            "unit": "ns/op\t    6144 B/op\t      63 allocs/op",
+            "extra": "374838 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - ns/op",
+            "value": 6274,
+            "unit": "ns/op",
+            "extra": "374838 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - B/op",
+            "value": 6144,
+            "unit": "B/op",
+            "extra": "374838 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - allocs/op",
+            "value": 63,
+            "unit": "allocs/op",
+            "extra": "374838 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind",
+            "value": 6295,
+            "unit": "ns/op\t    6144 B/op\t      63 allocs/op",
+            "extra": "376290 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - ns/op",
+            "value": 6295,
+            "unit": "ns/op",
+            "extra": "376290 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - B/op",
+            "value": 6144,
+            "unit": "B/op",
+            "extra": "376290 times"
+          },
+          {
+            "name": "BenchmarkJSON/Bind - allocs/op",
+            "value": 63,
+            "unit": "allocs/op",
+            "extra": "376290 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel",
+            "value": 6740,
+            "unit": "ns/op\t    6384 B/op\t      68 allocs/op",
+            "extra": "350644 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - ns/op",
+            "value": 6740,
+            "unit": "ns/op",
+            "extra": "350644 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - B/op",
+            "value": 6384,
+            "unit": "B/op",
+            "extra": "350644 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - allocs/op",
+            "value": 68,
+            "unit": "allocs/op",
+            "extra": "350644 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel",
+            "value": 6771,
+            "unit": "ns/op\t    6384 B/op\t      68 allocs/op",
+            "extra": "352639 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - ns/op",
+            "value": 6771,
+            "unit": "ns/op",
+            "extra": "352639 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - B/op",
+            "value": 6384,
+            "unit": "B/op",
+            "extra": "352639 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - allocs/op",
+            "value": 68,
+            "unit": "allocs/op",
+            "extra": "352639 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel",
+            "value": 6742,
+            "unit": "ns/op\t    6384 B/op\t      68 allocs/op",
+            "extra": "351116 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - ns/op",
+            "value": 6742,
+            "unit": "ns/op",
+            "extra": "351116 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - B/op",
+            "value": 6384,
+            "unit": "B/op",
+            "extra": "351116 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - allocs/op",
+            "value": 68,
+            "unit": "allocs/op",
+            "extra": "351116 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel",
+            "value": 6751,
+            "unit": "ns/op\t    6384 B/op\t      68 allocs/op",
+            "extra": "351252 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - ns/op",
+            "value": 6751,
+            "unit": "ns/op",
+            "extra": "351252 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - B/op",
+            "value": 6384,
+            "unit": "B/op",
+            "extra": "351252 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindWithLevel - allocs/op",
+            "value": 68,
+            "unit": "allocs/op",
+            "extra": "351252 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers",
+            "value": 10397,
+            "unit": "ns/op\t    7728 B/op\t      95 allocs/op",
+            "extra": "229012 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - ns/op",
+            "value": 10397,
+            "unit": "ns/op",
+            "extra": "229012 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - B/op",
+            "value": 7728,
+            "unit": "B/op",
+            "extra": "229012 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - allocs/op",
+            "value": 95,
+            "unit": "allocs/op",
+            "extra": "229012 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers",
+            "value": 10232,
+            "unit": "ns/op\t    7728 B/op\t      95 allocs/op",
+            "extra": "233563 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - ns/op",
+            "value": 10232,
+            "unit": "ns/op",
+            "extra": "233563 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - B/op",
+            "value": 7728,
+            "unit": "B/op",
+            "extra": "233563 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - allocs/op",
+            "value": 95,
+            "unit": "allocs/op",
+            "extra": "233563 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers",
+            "value": 10277,
+            "unit": "ns/op\t    7728 B/op\t      95 allocs/op",
+            "extra": "233578 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - ns/op",
+            "value": 10277,
+            "unit": "ns/op",
+            "extra": "233578 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - B/op",
+            "value": 7728,
+            "unit": "B/op",
+            "extra": "233578 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - allocs/op",
+            "value": 95,
+            "unit": "allocs/op",
+            "extra": "233578 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers",
+            "value": 10395,
+            "unit": "ns/op\t    7728 B/op\t      95 allocs/op",
+            "extra": "212593 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - ns/op",
+            "value": 10395,
+            "unit": "ns/op",
+            "extra": "212593 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - B/op",
+            "value": 7728,
+            "unit": "B/op",
+            "extra": "212593 times"
+          },
+          {
+            "name": "BenchmarkJSON/BindAndCreateSuppliers - allocs/op",
+            "value": 95,
+            "unit": "allocs/op",
+            "extra": "212593 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind",
+            "value": 7530,
+            "unit": "ns/op\t    7168 B/op\t      79 allocs/op",
+            "extra": "320746 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - ns/op",
+            "value": 7530,
+            "unit": "ns/op",
+            "extra": "320746 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - B/op",
+            "value": 7168,
+            "unit": "B/op",
+            "extra": "320746 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - allocs/op",
+            "value": 79,
+            "unit": "allocs/op",
+            "extra": "320746 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind",
+            "value": 7610,
+            "unit": "ns/op\t    7168 B/op\t      79 allocs/op",
+            "extra": "310461 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - ns/op",
+            "value": 7610,
+            "unit": "ns/op",
+            "extra": "310461 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - B/op",
+            "value": 7168,
+            "unit": "B/op",
+            "extra": "310461 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - allocs/op",
+            "value": 79,
+            "unit": "allocs/op",
+            "extra": "310461 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind",
+            "value": 7548,
+            "unit": "ns/op\t    7168 B/op\t      79 allocs/op",
+            "extra": "310434 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - ns/op",
+            "value": 7548,
+            "unit": "ns/op",
+            "extra": "310434 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - B/op",
+            "value": 7168,
+            "unit": "B/op",
+            "extra": "310434 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - allocs/op",
+            "value": 79,
+            "unit": "allocs/op",
+            "extra": "310434 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind",
+            "value": 7557,
+            "unit": "ns/op\t    7168 B/op\t      79 allocs/op",
+            "extra": "314672 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - ns/op",
+            "value": 7557,
+            "unit": "ns/op",
+            "extra": "314672 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - B/op",
+            "value": 7168,
+            "unit": "B/op",
+            "extra": "314672 times"
+          },
+          {
+            "name": "BenchmarkYAML/Bind - allocs/op",
+            "value": 79,
+            "unit": "allocs/op",
+            "extra": "314672 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel",
+            "value": 8047,
+            "unit": "ns/op\t    7592 B/op\t      86 allocs/op",
+            "extra": "295801 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - ns/op",
+            "value": 8047,
+            "unit": "ns/op",
+            "extra": "295801 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - B/op",
+            "value": 7592,
+            "unit": "B/op",
+            "extra": "295801 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - allocs/op",
+            "value": 86,
+            "unit": "allocs/op",
+            "extra": "295801 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel",
+            "value": 8057,
+            "unit": "ns/op\t    7592 B/op\t      86 allocs/op",
+            "extra": "294385 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - ns/op",
+            "value": 8057,
+            "unit": "ns/op",
+            "extra": "294385 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - B/op",
+            "value": 7592,
+            "unit": "B/op",
+            "extra": "294385 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - allocs/op",
+            "value": 86,
+            "unit": "allocs/op",
+            "extra": "294385 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel",
+            "value": 8079,
+            "unit": "ns/op\t    7592 B/op\t      86 allocs/op",
+            "extra": "295618 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - ns/op",
+            "value": 8079,
+            "unit": "ns/op",
+            "extra": "295618 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - B/op",
+            "value": 7592,
+            "unit": "B/op",
+            "extra": "295618 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - allocs/op",
+            "value": 86,
+            "unit": "allocs/op",
+            "extra": "295618 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel",
+            "value": 8064,
+            "unit": "ns/op\t    7592 B/op\t      86 allocs/op",
+            "extra": "296911 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - ns/op",
+            "value": 8064,
+            "unit": "ns/op",
+            "extra": "296911 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - B/op",
+            "value": 7592,
+            "unit": "B/op",
+            "extra": "296911 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindWithLevel - allocs/op",
+            "value": 86,
+            "unit": "allocs/op",
+            "extra": "296911 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers",
+            "value": 26577,
+            "unit": "ns/op\t   19753 B/op\t     209 allocs/op",
+            "extra": "90314 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - ns/op",
+            "value": 26577,
+            "unit": "ns/op",
+            "extra": "90314 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - B/op",
+            "value": 19753,
+            "unit": "B/op",
+            "extra": "90314 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - allocs/op",
+            "value": 209,
+            "unit": "allocs/op",
+            "extra": "90314 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers",
+            "value": 26496,
+            "unit": "ns/op\t   19753 B/op\t     209 allocs/op",
+            "extra": "90649 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - ns/op",
+            "value": 26496,
+            "unit": "ns/op",
+            "extra": "90649 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - B/op",
+            "value": 19753,
+            "unit": "B/op",
+            "extra": "90649 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - allocs/op",
+            "value": 209,
+            "unit": "allocs/op",
+            "extra": "90649 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers",
+            "value": 26506,
+            "unit": "ns/op\t   19753 B/op\t     209 allocs/op",
+            "extra": "90512 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - ns/op",
+            "value": 26506,
+            "unit": "ns/op",
+            "extra": "90512 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - B/op",
+            "value": 19753,
+            "unit": "B/op",
+            "extra": "90512 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - allocs/op",
+            "value": 209,
+            "unit": "allocs/op",
+            "extra": "90512 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers",
+            "value": 26547,
+            "unit": "ns/op\t   19753 B/op\t     209 allocs/op",
+            "extra": "90806 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - ns/op",
+            "value": 26547,
+            "unit": "ns/op",
+            "extra": "90806 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - B/op",
+            "value": 19753,
+            "unit": "B/op",
+            "extra": "90806 times"
+          },
+          {
+            "name": "BenchmarkYAML/BindAndCreateSuppliers - allocs/op",
+            "value": 209,
+            "unit": "allocs/op",
+            "extra": "90806 times"
           }
         ]
       }
